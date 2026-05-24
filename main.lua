@@ -1,9 +1,11 @@
+function love.load()
+  x = 50
+end
+  
+function love.update(dt) -- using delta time (dt) to move the rectangle at the same speed on all computers
+  x = x + 15 * dt -- ~update~ the value of x, making the rectangle move
+end
+
 function love.draw()
-  a = 3
-  b = 5
-  
-  love.graphics.print((a + b), 100, 100)
-  
-  love.graphics.ellipse('line', 200, 200, 50, 50)
-  love.graphics.rectangle('fill', 200, 100, 80, 100)
+  love.graphics.rectangle('line', x, 50, 200, 120) -- (X, Y, W, H)
 end
