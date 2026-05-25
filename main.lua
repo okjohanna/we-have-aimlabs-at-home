@@ -1,46 +1,39 @@
+local circle = require("src/circle")
+local modes = {
+  require("src/modes/reactivity"),
+  require("src/modes/precision")
+}
+local currentModeIndex = 1
+local currentMode = modes[currentModeIndex]
+
 local mouse = {}
-local circle = {}
 
-local defaultColor = {1, 0, 0}
-local successColor = {0, 1, 0}
-
-local modes = {"REACTIVITY", "PRECISION"}
-
-function love.load()  
-  circle.x = 300
-  circle.y = 300
-  circle.radius = 10
-  
-  love.graphics.setColor(defaultColor)
+function love.load()
+  love.window.setTitle("We Have Aimlabs at Home. The Aimlabs at Home:")
+  mouse.x, mouse.y = love.mouse.getPosition()
+  circle.init()
 end
 
 function love.update(dt)
   mouse.x, mouse.y = love.mouse.getPosition()
-  
-  local dx = mouse.x - circle.x
-  local dy = mouse.y - circle.y
-  
-  mouseInCircle = dx^2 + dy^2 < circle.radius^2
+  currentMode.update(circle, mouse.x, mouse.y)
 end
 
 function love.draw()
-  if mouseInCircle then
-    love.graphics.setColor(successColor)
-  end
-  love.graphics.circle("fill", circle.x, circle.y, circle.radius)
+  currentMode.draw(circle)
   
-  -- Reset color before drawing text
-  love.graphics.setColor(defaultColor)
-  love.graphics.print("Press M to change MODE", 0, 15)
+  love.graphics.setColor(1, 1, 1)
   love.graphics.print("Mouse coordinates: " .. mouse.x .. ", " .. mouse.y)
+  love.graphics.print("Press M to change Mode: " .. currentMode.name, 0, 15)
 end
-  
+
 function love.mousepressed(x, y, button, istouch)
-  local dx = x - circle.x
-  local dy = y - circle.y
-  
-  if button == 1 and dx^2 + dy^2 < circle.radius^2 then
-    circle.x = math.random(100, 500)
-    circle.y = math.random(100, 500)
-  end
+  currentMode.mousepressed(circle, x, y, button)
 end
+
+function love.keypressed(key)
+  if key == "m" then
+    currentModeIndex = currentModeIndex % #modes + 1
+    currentMode = modes[currentModeIndex]
+  end
+end    
