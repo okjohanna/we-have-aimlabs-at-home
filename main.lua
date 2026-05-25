@@ -1,57 +1,34 @@
 function love.load()
-  -- Set random seed
-  math.randomseed(os.time())
+  listOfRectangles = {}
+end
+
+function createRect()
+  rect = {}
+  rect.x = 300
+  rect.y = 300
+  rect.width = 70 -- (same as rect["width"] = 100)
+  rect.height = 50
+  rect.speed = 100
   
-  -- Figure initial position
-  x = 300
-  y = 300
-  
-  -- Is able to move
-  move = true
-  
-  -- Fruits table from tutorial
-  fruits = {"apple", "banana", "plum"}
-  table.insert(fruits, "pear")
-  
-  for i,v in ipairs(fruits) do
-    print(i, v)
-  end
-  
-  -- Names for the worm
-  names = {"Jim", "Bob", "Natalie", "Wormillion"}
-  worm_name = names[math.random(#names)]
+  -- Insert new rectangle into list
+  table.insert(listOfRectangles, rect)
 end
   
-function love.update(dt) -- Add delta time (dt) to move the rectangle at the same speed on all computers
-  if love.keyboard.isDown("right") then
-    x = x + 200 * dt -- ~Update~ the value of x, making the rectangle move
+function love.keypressed(key)
+  if key == "space" then
+    createRect()
   end
+end
   
-  if love.keyboard.isDown("left") then
-    x = x - 200 * dt
-  end
-  
-  if love.keyboard.isDown("up") then
-    y = y - 200 * dt
-  end
-  
-  if love.keyboard.isDown("down") then
-    y = y + 200 * dt
+function love.update(dt)
+  -- Iterate through list of rectangles
+  for i,v in ipairs(listOfRectangles) do
+    v.x = v.x + v.speed * dt
   end
 end
 
 function love.draw()
-  -- Prints all the fruit in fruits under one another
-  for i,fruit in ipairs(fruits) do
-    love.graphics.print(fruit, 100, 100 + 50 * i)
+  for i,v in ipairs(listOfRectangles) do
+    love.graphics.rectangle("line", v.x, v.y, v.width, v.height)
   end
-  
-  love.graphics.print(worm_name, (x + 25), (y - 5))
-  
-  -- [ --
-  -- love.graphics.print(names[math.random(#names)], (x + 25), (y - 5))
-  -- Keeps blasting through all the names. Looked fitting for a slots machine. 
-  -- ] --
-  
-  love.graphics.circle('fill', x, y, 15, 15) -- (X, Y, W, H)
 end
