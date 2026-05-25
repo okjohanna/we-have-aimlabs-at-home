@@ -2,28 +2,53 @@ local precision = {}
 
 precision.name = "PRECISION"
 
+local speed = 100
+local turnSpeed = 2
+local changeInterval = 1
+
 function precision.init(circle)
-  local speed = 100
-  local angle = math.random() * math.pi * 2  -- Random direction in radians
-  circle.vx = math.cos(angle) * speed
-  circle.vy = math.sin(angle) * speed
+  circle.angle = math.random() * math.pi * 2
+  circle.targetAngle = circle.angle
+  circle.changeTimer = 0
 end
 
 function precision.update(circle, mx, my, dt)
   circle.update(mx, my)
 
-  circle.x = circle.x + circle.vx * dt
-  circle.y = circle.y + circle.vy * dt
+  -- Pick a new target angle periodically
+  circle.changeTimer = circle.changeTimer + dt
+  if circle.changeTimer >= changeInterval then
+    circle.targetAngle = math.random() * math.pi * 2
+    circle.changeTimer = 0
+  end
 
-  -- Bounce off boundaries
-  if circle.x < 30 or circle.x > 760 then
-    circle.vx = -circle.vx
-    circle.x = math.max(30, math.min(760, circle.x))  -- Clamp to avoid sticking
+  -- Smoothly steer toward target angle
+  circle.angle = circle.angle + (circle.targetAngle - circle.angle) * turnSpeed * dt
+
+  -- Move
+  circle.x = circle.x + math.cos(circle.angle) * speed * dt
+  circle.y = circle.y + math.sin(circle.angle) * speed * dt
+
+  -- Steer away from walls instead of bouncing
+  local margin = 100
+  if circle.x < 67 + margin then
+    circle.targetAngle = 0  -- steer right
+    circle.changeTimer = 0
+  elseif circle.x > 770 - margin then
+    circle.targetAngle = math.pi  -- steer left
+    circle.changeTimer = 0
   end
-  if circle.y < 67 or circle.y > 580 then
-    circle.vy = -circle.vy
-    circle.y = math.max(67, math.min(580, circle.y))
+  if circle.y < 67 + margin then
+    circle.targetAngle = math.pi / 2  -- steer down
+    circle.changeTimer = 0
+  elseif circle.y > 580 - margin then
+    circle.targetAngle = -math.pi / 2  -- steer up
+    circle.changeTimer = 0
   end
+
+  -- Hard clamp just in case it clips a boundary
+  circle.x = math.max(67, math.min(760, circle.x))
+  circle.y = math.max(67, math.min(580, circle.y))
 end
 
 function precision.draw(circle)
@@ -31,7 +56,6 @@ function precision.draw(circle)
 end
 
 function precision.mousepressed(circle, x, y, button)
-  -- nothing for now
 end
 
 return precision
