@@ -17,8 +17,8 @@ function circle.update(mx, my)
 end
 
 function circle.randomize()
-  circle.x = math.random(30, 760)
-  circle.y = math.random(67, 580)
+  circle.x = math.random(100, 500)
+  circle.y = math.random(100, 500)
 end
 
 function circle.draw()

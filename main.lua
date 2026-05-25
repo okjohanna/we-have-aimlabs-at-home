@@ -10,21 +10,20 @@ local mouse = {}
 
 function love.load()
   love.window.setTitle("We Have Aimlabs at Home. The Aimlabs at Home:")
-  mouse.x, mouse.y = love.mouse.getPosition()
   circle.init()
 end
 
 function love.update(dt)
   mouse.x, mouse.y = love.mouse.getPosition()
-  currentMode.update(circle, mouse.x, mouse.y)
+  currentMode.update(circle, mouse.x, mouse.y, dt)
 end
 
 function love.draw()
   currentMode.draw(circle)
-  
+
   love.graphics.setColor(1, 1, 1)
-  love.graphics.print("Mouse coordinates: " .. mouse.x .. ", " .. mouse.y)
-  love.graphics.print("Press M to change Mode: " .. currentMode.name, 0, 15)
+  love.graphics.print("Press M to change Mode: " .. currentMode.name, 0, 0)
+  love.graphics.print("Mouse coordinates: " .. mouse.x .. ", " .. mouse.y, 0, 15)
 end
 
 function love.mousepressed(x, y, button, istouch)
@@ -35,5 +34,8 @@ function love.keypressed(key)
   if key == "m" then
     currentModeIndex = currentModeIndex % #modes + 1
     currentMode = modes[currentModeIndex]
+    if currentMode.init then
+      currentMode.init(circle)
+    end
   end
-end    
+end
