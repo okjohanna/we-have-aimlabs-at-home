@@ -1,7 +1,8 @@
-local circle = require("src/circle")
+local circle = require("src.circle")
 local modes = {
-  require("src/modes/reactivity"),
-  require("src/modes/precision")
+  require("src.modes.reactivity"),
+  require("src.modes.precision"),
+  require("src.modes.precisiontwo")
 }
 local currentModeIndex = 1
 local currentMode = modes[currentModeIndex]
