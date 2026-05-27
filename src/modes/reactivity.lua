@@ -34,10 +34,15 @@ end
 
 function reactivity.getStats()
   if lastReaction then
-    return {
+    local stats = {
       {1,1,1}, "Reaction time: ", {0,1,0}, string.format("%.2f s", lastReaction),
       {1,1,1}, "\nBest: ", {0,1,0}, string.format("%.2f s", bestReaction)
     }
+    if bestReaction < 0.40 then
+      table.insert(stats, {1,1,0})
+      table.insert(stats, "\nInsane reflexes!!")
+    end
+    return stats
   end
 end
 

@@ -1,6 +1,13 @@
-local circle = require("src.circle")
 local mainFont = love.graphics.newFont("src/assets/Jersey10-Regular.ttf", 24)
+local circle = require("src.circle")
 local mouse = {}
+
+local circleSizes = {
+  { name = "small", radius = 8 },
+  { name = "medium", radius = 16 },
+  { name = "large", radius = 22 }
+}
+local currentSizeIndex = 1
 
 local modes = {
   require("src.modes.reactivity"),
@@ -37,15 +44,37 @@ function love.draw()
     },
     15, 10
   )
-  love.graphics.print("Mouse coordinates: " .. mouse.x .. ", " .. mouse.y, 15, 35)
   
   if currentMode.getStats then
     local stats = currentMode.getStats()
     if stats then
       love.graphics.setColor(1, 1, 1)
-      love.graphics.print(stats, 15, 60)
+      love.graphics.print(stats, 15, 38)
     end
   end
+  
+  local W, H = love.graphics.getDimensions()
+  love.graphics.print(
+    {
+      {1,1,1}, "Press ",
+      {0,1,0}, "SPACE",
+      {1,1,1}, " to change circle size: ",
+      {0,1,0}, circleSizes[currentSizeIndex].name
+    },
+    15, H - 35
+  )
+  
+  love.graphics.print(
+    {
+      {1,1,1}, "Press ",
+      {0,1,0}, "Q",
+      {1,1,1}, " to Quit",
+    },
+    W/1.20, H - 35
+  )
+  
+  love.graphics.setColor(1,1,1, 0.3)
+  love.graphics.print("Mouse coordinates: " .. mouse.x .. ", " .. mouse.y, W/1.45, 10)
 end
 
 function love.mousepressed(x, y, button, istouch)
@@ -53,11 +82,20 @@ function love.mousepressed(x, y, button, istouch)
 end
 
 function love.keypressed(key)
-  if key == "m" then
+  if key == 'm' then
     currentModeIndex = currentModeIndex % #modes + 1
     currentMode = modes[currentModeIndex]
     if currentMode.init then
       currentMode.init(circle)
     end
+  end
+  
+  if key == 'space' then
+    currentSizeIndex = currentSizeIndex % #circleSizes + 1
+    circle.radius = circleSizes[currentSizeIndex].radius
+  end
+  
+  if key == 'q' then
+    love.event.quit()
   end
 end

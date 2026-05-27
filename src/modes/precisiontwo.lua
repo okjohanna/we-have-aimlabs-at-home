@@ -2,7 +2,7 @@ local precision = {}
 
 precision.name = "TRACKING 2"
 
-local speed = 50
+local speed = 85
 local direction = 1 -- 1=right, -1=left
 
 function precision.init(circle)
@@ -13,6 +13,8 @@ function precision.update(circle, mx, my, dt)
   
   local W, H = love.graphics.getDimensions()
   local margin = 100
+  
+  circle.y = 300
   
   if circle.x > W - margin then
     direction = -1

@@ -2,7 +2,7 @@ local precision = {}
 
 precision.name = "TRACKING 1"
 
-local speed = 50
+local speed = 85
 local turnSpeed = 2
 local changeInterval = 1
 
