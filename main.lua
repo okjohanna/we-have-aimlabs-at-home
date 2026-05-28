@@ -18,7 +18,6 @@ local currentModeIndex = 1
 local currentMode = modes[currentModeIndex]
 
 function love.load()
-  love.window.setTitle("We Have Aimlabs at Home. The Aimlabs at Home:")
   circle.init()
   if currentMode.init then
     currentMode.init(circle)
@@ -70,11 +69,11 @@ function love.draw()
       {0,1,0}, "Q",
       {1,1,1}, " to Quit",
     },
-    W/1.20, H - 35
+    W - 140, H - 35
   )
   
   love.graphics.setColor(1,1,1, 0.3)
-  love.graphics.print("Mouse coordinates: " .. mouse.x .. ", " .. mouse.y, W/1.45, 10)
+  love.graphics.print("Mouse coordinates: " .. mouse.x .. ", " .. mouse.y, W - 260, 10)
 end
 
 function love.mousepressed(x, y, button, istouch)
@@ -97,5 +96,9 @@ function love.keypressed(key)
   
   if key == 'q' then
     love.event.quit()
+  end
+  
+  if currentMode.keypressed then
+    currentMode.keypressed(circle, key)
   end
 end

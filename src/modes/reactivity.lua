@@ -29,6 +29,14 @@ function reactivity.mousepressed(circle, x, y, button)
     end
     circle.randomize()
     startTime = love.timer.getTime()
+  end  
+end
+
+-- Reset circle with R if it stays out of window 
+function reactivity.keypressed(circle, key)
+  if key == 'r' then
+    circle.randomize()
+    startTime = love.timer.getTime()
   end
 end
 

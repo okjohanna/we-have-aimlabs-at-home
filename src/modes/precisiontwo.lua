@@ -14,7 +14,7 @@ function precision.update(circle, mx, my, dt)
   local W, H = love.graphics.getDimensions()
   local margin = 100
   
-  circle.y = 300
+  circle.y = H/2
   
   if circle.x > W - margin then
     direction = -1

@@ -3,9 +3,11 @@ local circle = {}
 local defaultColor = {1, 0, 0}
 local successColor = {0, 1, 0}
 
+local W, H = love.graphics.getDimensions()
+
 function circle.init()
-  circle.x = 300
-  circle.y = 300
+  circle.x = W/2
+  circle.y = H/2
   circle.radius = 10
   circle.isHovered = false
 end
@@ -17,8 +19,8 @@ function circle.update(mx, my)
 end
 
 function circle.randomize()
-  circle.x = math.random(100, 500)
-  circle.y = math.random(100, 500)
+  circle.x = math.random(W/4, W-50)
+  circle.y = math.random(H/4, H-50)
 end
 
 function circle.draw()

@@ -29,15 +29,6 @@ function precision.update(circle, mx, my, dt)
   circle.x = circle.x + math.cos(circle.angle) * speed * dt
   circle.y = circle.y + math.sin(circle.angle) * speed * dt
 
-  -- Steer away from walls instead of bouncing
-  --[[
-
-
-  -- Hard clamp just in case it clips a boundary
-  circle.x = math.max(67, math.min(760, circle.x))
-  circle.y = math.max(67, math.min(580, circle.y))
-  ]]--
-  
   local W, H = love.graphics.getDimensions()
   local margin = 100
   if circle.x < margin then
@@ -54,8 +45,6 @@ function precision.update(circle, mx, my, dt)
     circle.targetAngle = -math.pi / 2  -- steer up
     circle.changeTimer = 0
   end
-  
-  
 end
 
 function precision.draw(circle)
